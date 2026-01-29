@@ -46,3 +46,15 @@
 	align-items: center;
 	gap: 1em;
 }
+
+.quote-container {
+	padding-top: 3em;
+	padding-bottom: 3em;
+	margin: auto;
+	width: 100%;
+	text-align: center;
+}
+
+.quote-container h3 {
+	margin-top: 0.5em;
+}
