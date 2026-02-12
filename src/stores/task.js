@@ -10,17 +10,34 @@ const useTaskStore = create((set) => ({
 		set((state) => ({
 			tasks: [task, ...state.tasks],
 		})),
+	toggleTaskCompleteness: (id) =>
+		set((state) => {
+			const currentTaskIdx = state.tasks.findIndex((task) => task.id === id);
+			const updatedTask = {
+				...state.tasks[currentTaskIdx],
+				done: !state.tasks[currentTaskIdx].done,
+			};
+			const newTaskList = state.tasks.filter((task) => {
+				return task.id !== id;
+			});
+
+			return {
+				tasks: [updatedTask, ...newTaskList],
+			};
+		}),
 	editTask: (id, newTaskText) =>
 		set((state) => {
 			const currentTaskIdx = state.tasks.findIndex((task) => task.id === id);
 			const updatedTask = {
-				id: state.tasks[currentTaskIdx].id,
-				title: state.tasks[currentTaskIdx].title,
+				...state.tasks[currentTaskIdx],
 				description: newTaskText,
 			};
+			const newTaskList = state.tasks.filter((task) => {
+				return task.id !== id;
+			});
 
 			return {
-				tasks: [updatedTask, ...state.tasks],
+				tasks: [updatedTask, ...newTaskList],
 			};
 		}),
 	deleteTask: (id) =>
