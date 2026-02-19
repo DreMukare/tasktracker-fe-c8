@@ -1,28 +1,24 @@
+import { useQuery } from '@tanstack/react-query';
 import useQuoteStore from '../stores/quote';
+import { useEffect } from 'react';
 
 const useQuotes = () => {
 	const { setQuoteOfTheDay } = useQuoteStore.getState();
 
-	const fetchQuotes = async () => {
-		let quote;
+	const { isPending, error, data } = useQuery({
+		queryKey: ['quote'],
+		queryFn: () => {
+			return fetch('/api/today').then((res) => res.json());
+		},
+	});
 
-		try {
-			const res = await fetch('/api/today');
-			quote = await res.json();
-
-			if (quote[0].q) {
-				setQuoteOfTheDay(quote[0]);
-			} else {
-				throw new Error('Something went wrong fetching quote of the day');
-			}
-		} catch (error) {
-			console.error('Failed to fetch quote of the day: ', error);
+	useEffect(() => {
+		if (data?.[0]?.q) {
+			setQuoteOfTheDay(data[0]);
 		}
+	}, [data, setQuoteOfTheDay]);
 
-		return quote;
-	};
-
-	return fetchQuotes();
+	return { isPending, error, data };
 };
 
 export default useQuotes;
