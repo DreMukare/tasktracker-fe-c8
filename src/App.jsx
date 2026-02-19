@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import ThemeContext from './contexts/ThemeContext';
 import { Route, Routes } from 'react-router';
 import Layout from './components/Layout';
 import Landing from './pages/landing';
